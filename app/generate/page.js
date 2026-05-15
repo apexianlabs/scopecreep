@@ -43,7 +43,6 @@ function ScopeCreepInner() {
       })
       const data = await res.json()
       if (!res.ok) throw new Error(data.error || 'Analysis failed')
-      console.log('RESULT:', JSON.stringify(data.result))
       setResult(data.result)
     } catch(e) {
       setError(e.message)
@@ -123,32 +122,40 @@ function ScopeCreepInner() {
             })()}
 
             {/* Impact */}
-            {result.impact && (
+            {(result.impact || result.reasoning) && (
               <div style={{background:'#fff',border:'1px solid #e2e8f0',borderRadius:12,padding:20}}>
                 <p style={{fontSize:11,fontWeight:700,color:'#475569',textTransform:'uppercase',letterSpacing:'0.08em',marginBottom:10}}>💰 Impact Assessment</p>
-                <p style={{fontSize:14,color:'#374151',lineHeight:1.6}}>{typeof result.impact === 'string' ? result.impact : JSON.stringify(result.impact)}</p>
+                <p style={{fontSize:14,color:'#374151',lineHeight:1.6}}>{result.impact || result.reasoning}</p>
               </div>
             )}
 
             {/* Recommended charge */}
-            {result.recommended_charge && (
+            {result.recommended_charge || result.estimated_additional_cost && (
               <div style={{background:'#f0fdf4',border:'1px solid #bbf7d0',borderRadius:12,padding:20}}>
                 <p style={{fontSize:11,fontWeight:700,color:'#15803d',textTransform:'uppercase',letterSpacing:'0.08em',marginBottom:6}}>💵 Recommended Charge</p>
-                <p style={{fontSize:20,fontWeight:800,color:'#15803d'}}>{result.recommended_charge}</p>
+                <p style={{fontSize:20,fontWeight:800,color:'#15803d'}}>{result.recommended_charge || result.estimated_additional_cost}</p>
               </div>
             )}
 
             {/* Response email */}
-            {result.suggested_response && (
+            {result.suggested_response || result.recommended_response && (
               <div style={{background:'#fff',border:'1px solid #e2e8f0',borderRadius:12,padding:20}}>
                 <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:12}}>
                   <p style={{fontSize:11,fontWeight:700,color:'#475569',textTransform:'uppercase',letterSpacing:'0.08em'}}>✉️ Suggested Response</p>
-                  <button onClick={() => navigator.clipboard.writeText(result.suggested_response)}
+                  <button onClick={() => navigator.clipboard.writeText(result.suggested_response || result.recommended_response)}
                     style={{fontSize:11,color:'#7c3aed',background:'#f5f3ff',border:'1px solid #ddd6fe',borderRadius:6,padding:'4px 10px',cursor:'pointer',fontFamily:'Inter,sans-serif',fontWeight:600}}>
                     Copy
                   </button>
                 </div>
-                <p style={{fontSize:13,color:'#374151',lineHeight:1.7,whiteSpace:'pre-wrap'}}>{result.suggested_response}</p>
+                <p style={{fontSize:13,color:'#374151',lineHeight:1.7,whiteSpace:'pre-wrap'}}>{result.suggested_response || result.recommended_response}</p>
+              </div>
+            )}
+
+            {/* Change order badge */}
+            {result.change_order_needed && (
+              <div style={{background:'#fffbeb',border:'1px solid #fde68a',borderRadius:10,padding:'10px 16px',display:'flex',alignItems:'center',gap:8}}>
+                <span style={{fontSize:16}}>📋</span>
+                <span style={{fontSize:13,fontWeight:600,color:'#d97706'}}>Change order required — get client sign-off before proceeding</span>
               </div>
             )}
 
