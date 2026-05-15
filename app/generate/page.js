@@ -54,9 +54,17 @@ function ScopeCreepInner() {
   const getVerdictStyle = (verdict) => {
     if (!verdict) return { bg: '#f8fafc', color: '#475569', border: '#e2e8f0' }
     const v = verdict.toLowerCase()
-    if (v.includes('scope creep') || v.includes('out of scope')) return { bg: '#fef2f2', color: '#dc2626', border: '#fecaca' }
-    if (v.includes('borderline') || v.includes('grey')) return { bg: '#fffbeb', color: '#d97706', border: '#fde68a' }
+    if (v.includes('scope creep') || v.includes('out_of_scope') || v.includes('out of scope')) return { bg: '#fef2f2', color: '#dc2626', border: '#fecaca' }
+    if (v.includes('borderline') || v.includes('grey') || v.includes('gray') || v.includes('partial')) return { bg: '#fffbeb', color: '#d97706', border: '#fde68a' }
     return { bg: '#f0fdf4', color: '#15803d', border: '#bbf7d0' }
+  }
+
+  const formatVerdict = (verdict) => {
+    if (!verdict) return ''
+    return verdict
+      .replace(/_/g, ' ')
+      .toLowerCase()
+      .replace(/\b\w/g, c => c.toUpperCase())
   }
 
   const inputStyle = {
@@ -107,7 +115,7 @@ function ScopeCreepInner() {
               return (
                 <div style={{background:vs.bg,border:`2px solid ${vs.border}`,borderRadius:14,padding:24}}>
                   <p style={{fontSize:11,fontWeight:700,color:vs.color,textTransform:'uppercase',letterSpacing:'0.08em',marginBottom:8}}>Verdict</p>
-                  <p style={{fontSize:22,fontWeight:800,color:vs.color,marginBottom:8}}>{result.verdict}</p>
+                  <p style={{fontSize:22,fontWeight:800,color:vs.color,marginBottom:8}}>{formatVerdict(result.verdict)}</p>
                   {result.reasoning && <p style={{fontSize:14,color:'#374151',lineHeight:1.6}}>{result.reasoning}</p>}
                 </div>
               )
