@@ -43,6 +43,7 @@ function ScopeCreepInner() {
       })
       const data = await res.json()
       if (!res.ok) throw new Error(data.error || 'Analysis failed')
+      console.log('RESULT:', JSON.stringify(data.result))
       setResult(data.result)
     } catch(e) {
       setError(e.message)
